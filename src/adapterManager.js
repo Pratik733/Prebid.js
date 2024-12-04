@@ -29,6 +29,7 @@ import {config, RANDOM} from './config.js';
 import {hook} from './hook.js';
 import {find, includes} from './polyfill.js';
 import {
+  getAuctionCounter,
   getBidderRequestsCounter,
   getBidderWinsCounter,
   getRequestsCounter,
@@ -134,6 +135,7 @@ function getBids({bidderCode, auctionId, bidderRequestId, adUnits, src, metrics}
           auctionId,
           src,
           metrics,
+          auctionCount: getAuctionCounter(adUnit.code),
           bidRequestsCount: getRequestsCounter(adUnit.code),
           bidderRequestsCount: getBidderRequestsCounter(adUnit.code, bid.bidder),
           bidderWinsCount: getBidderWinsCounter(adUnit.code, bid.bidder),
