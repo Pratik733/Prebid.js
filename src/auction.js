@@ -98,6 +98,7 @@ import {defer, GreedyPromise} from './utils/promise.js';
 import {useMetrics} from './utils/perfMetrics.js';
 import {adjustCpm} from './utils/cpm.js';
 import {getGlobal} from './prebidGlobal.js';
+import {incrementAuctionCounter} from './adUnits.js';
 
 const { syncUsers } = userSync;
 
@@ -258,7 +259,11 @@ export function newAuction({adUnits, adUnitCodes, callback, cbTimeout, labels, a
   function callBids() {
     _auctionStatus = AUCTION_STARTED;
     _auctionStart = Date.now();
-
+    if (_adUnitCodes) {
+      _adUnitCodes.forEach(adUnitCode => {
+        incrementAuctionCounter(adUnitCode);
+      })
+    }
     let bidRequests = metrics.measureTime('requestBids.makeRequests',
       () => adapterManager.makeBidRequests(_adUnits, _auctionStart, _auctionId, _timeout, _labels, ortb2Fragments, metrics));
     logInfo(`Bids Requested for Auction with id: ${_auctionId}`, bidRequests);
